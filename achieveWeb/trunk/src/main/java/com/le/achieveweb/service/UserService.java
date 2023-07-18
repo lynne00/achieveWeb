@@ -23,7 +23,7 @@ public class UserService {
                     return "密码错误" ;
                 }
             } else {
-                return ".";
+                return "用户名不存在";
             }
         } catch (Exception e) {
             e.printStackTrace();
