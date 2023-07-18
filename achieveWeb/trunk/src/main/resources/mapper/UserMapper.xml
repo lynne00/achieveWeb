@@ -7,7 +7,7 @@
     </select>
     <select id="queryByName" resultType="com.le.achieveweb.entity.UserLogin">
         select *from sys_user
-        where username = #{name}
+        where username = #{username}
     </select>
     <select id="queryPswByName" resultType="string">
         select password from sys_user

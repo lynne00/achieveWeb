@@ -4,7 +4,7 @@ import com.le.achieveweb.dao.UserMapper;
 import com.le.achieveweb.entity.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import cn.hutool.core.util.IdUtil;
 @Service
 public class UserService {
     @Autowired
@@ -43,6 +43,8 @@ public class UserService {
             } else if (userExist != null) {
                 return "用户已经存在";
             } else {
+                String userId = IdUtil.randomUUID();
+                user.setId(userId);
                 userMapper.save(user);
                 return "注册成功";
             }
