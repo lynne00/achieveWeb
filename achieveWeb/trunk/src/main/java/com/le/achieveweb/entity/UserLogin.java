@@ -17,7 +17,7 @@ public class UserLogin {
     public String getUsername(){
         return username;
     }
-    public void setPassword(String password){
+    public void setHashPassword(String password){
         this.password = password;
     }
     public String getPassword(){

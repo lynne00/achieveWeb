@@ -15,7 +15,7 @@ public interface UserMapper {
 
     UserLogin queryByName(String username);
 
-    String  queryPswByName(String username);
+    String  queryHashPswByName(String username);
 
     void save(UserLogin user);
 }

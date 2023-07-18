@@ -47,11 +47,18 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>3.0.2</version>
         </dependency>
-       <dependency>
-           <groupId>cn.hutool</groupId>
-           <artifactId>hutool-all</artifactId>
-           <version>5.7.5</version>
-       </dependency>
+        <!--hutool生成id-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.7.5</version>
+        </dependency>
+        <!--BCrypt密码加密-->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -62,5 +69,38 @@
             </plugin>
         </plugins>
     </build>
+    <repositories>
+        <!-- 腾讯源 -->
+        <repository>
+            <id>tencent</id>
+            <name>tencent maven</name>
+            <url>https://mirrors.cloud.tencent.com/repository/maven/</url>
+            <layout>default</layout>
+            <!-- 是否开启发布版构件下载 -->
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <!-- 是否开启快照版构件下载 -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- 阿里源 -->
+        <repository>
+            <id>central</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <!-- 是否开启发布版构件下载 -->
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <!-- 是否开启快照版构件下载 -->
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+    </repositories>
 
 </project>

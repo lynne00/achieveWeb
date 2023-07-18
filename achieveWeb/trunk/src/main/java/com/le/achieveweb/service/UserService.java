@@ -1,5 +1,5 @@
 package com.le.achieveweb.service;
-
+import org.mindrot.jbcrypt.BCrypt;
 import com.le.achieveweb.dao.UserMapper;
 import com.le.achieveweb.entity.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,10 @@ public class UserService {
         try {
             UserLogin userExistN = userMapper.queryByName(user.getUsername());
             if (userExistN != null) {
-                String userExistP = userMapper.queryPswByName(user.getUsername());
-                if (userExistP.equals(user.getPassword())) {
+                String userExistP = userMapper.queryHashPswByName(user.getUsername());
+                // 验证密码
+                boolean isPasswordMatch = BCrypt.checkpw(user.getPassword(), userExistP);
+                if (isPasswordMatch) {
                     return "登录成功";
                 } else {
                     return "密码错误" ;
@@ -45,6 +47,9 @@ public class UserService {
             } else {
                 String userId = IdUtil.randomUUID().replace("-", "");
                 user.setId(userId);
+                // BCrypt对密码进行加密
+                String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+                user.setHashPassword(hashedPassword);
                 userMapper.save(user);
                 return "注册成功";
             }
