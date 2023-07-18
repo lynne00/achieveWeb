@@ -43,7 +43,7 @@ public class UserService {
             } else if (userExist != null) {
                 return "用户已经存在";
             } else {
-                String userId = IdUtil.randomUUID();
+                String userId = IdUtil.randomUUID().replace("-", "");
                 user.setId(userId);
                 userMapper.save(user);
                 return "注册成功";
