@@ -1,9 +1,8 @@
-package com.le.achieveweb.controller;
+package com.le.achieveweb.MVC.controller;
 
-import com.le.achieveweb.entity.UserLogin;
-import com.le.achieveweb.service.UserService;
+import com.le.achieveweb.MVC.entity.UserLogin;
+import com.le.achieveweb.MVC.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

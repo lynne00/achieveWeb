@@ -1,4 +1,4 @@
-package com.le.achieveweb.entity;
+package com.le.achieveweb.MVC.entity;
 
 public class UserLogin {
     private String id;

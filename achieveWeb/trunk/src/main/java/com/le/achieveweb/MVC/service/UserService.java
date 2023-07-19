@@ -1,10 +1,13 @@
-package com.le.achieveweb.service;
+package com.le.achieveweb.MVC.service;
+
+import com.le.achieveweb.util.PasswordUtil;
 import org.mindrot.jbcrypt.BCrypt;
-import com.le.achieveweb.dao.UserMapper;
-import com.le.achieveweb.entity.UserLogin;
+import com.le.achieveweb.MVC.dao.UserMapper;
+import com.le.achieveweb.MVC.entity.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cn.hutool.core.util.IdUtil;
+
 @Service
 public class UserService {
     @Autowired
@@ -18,11 +21,11 @@ public class UserService {
             if (userExistN != null) {
                 String userExistP = userMapper.queryHashPswByName(user.getUsername());
                 // 验证密码
-                boolean isPasswordMatch = BCrypt.checkpw(user.getPassword(), userExistP);
+                boolean isPasswordMatch = PasswordUtil.checkPassword(user.getPassword(), userExistP);
                 if (isPasswordMatch) {
                     return "登录成功";
                 } else {
-                    return "密码错误" ;
+                    return "密码错误";
                 }
             } else {
                 return "用户名不存在";
@@ -48,7 +51,7 @@ public class UserService {
                 String userId = IdUtil.randomUUID().replace("-", "");
                 user.setId(userId);
                 // BCrypt对密码进行加密
-                String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
+                String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
                 user.setHashPassword(hashedPassword);
                 userMapper.save(user);
                 return "注册成功";
@@ -57,4 +60,5 @@ public class UserService {
             e.printStackTrace();
             return e.getMessage();
         }
-    }}
+    }
+}
