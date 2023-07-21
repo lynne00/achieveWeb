@@ -1,5 +1,7 @@
 package com.le.achieveweb.MVC.service;
 
+import com.le.achieveweb.error.BusinessException;
+import com.le.achieveweb.error.EmBusinessErr;
 import com.le.achieveweb.util.PasswordUtil;
 import org.mindrot.jbcrypt.BCrypt;
 import com.le.achieveweb.MVC.dao.UserMapper;
@@ -25,10 +27,10 @@ public class UserService {
                 if (isPasswordMatch) {
                     return "登录成功";
                 } else {
-                    return "密码错误";
+                    throw new BusinessException(EmBusinessErr.LOGIN_ACCOUNT_PASSWORD_ERROR, "帐号或密码错误");
                 }
             } else {
-                return "用户名不存在";
+                throw new BusinessException(EmBusinessErr.  LOGIN_ACCOUNT_NOT_EXISTED, "用户名不存在");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,11 +44,11 @@ public class UserService {
         try {
             UserLogin userExist = userMapper.queryByName(user.getUsername());
             if (user.getUsername().equals("")) {
-                return "用户名不能为空";
+                throw new BusinessException(EmBusinessErr.PARAMETER_INVALIDATION, "用户名不能为空");
             } else if (user.getPassword().equals("")) {
-                return "密码不能为空";
+                throw new BusinessException(EmBusinessErr.PARAMETER_INVALIDATION, "密码不能为空");
             } else if (userExist != null) {
-                return "用户已经存在";
+                throw new BusinessException(EmBusinessErr.ACCOUNT_EXISTED, "帐号已存在");
             } else {
                 String userId = IdUtil.randomUUID().replace("-", "");
                 user.setId(userId);
