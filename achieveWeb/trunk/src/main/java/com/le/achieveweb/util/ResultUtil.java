@@ -1,19 +1,26 @@
 package com.le.achieveweb.util;
 
 import com.le.achieveweb.error.EmBusinessErr;
-import com.le.achieveweb.response.ResultError;
+import com.le.achieveweb.response.Result;
 
-public class ResultErrorUtil {
+public class ResultUtil {
     /**
      * 返回成功，传入返回体具体出參
      *
      * @param object
      * @return
      */
-    public static ResultError success(Object object) {
-        ResultError result = new ResultError();
+    public static Result loginSuccess(Object object) {
+        Result result = new Result();
         result.setStatus(0);
-        result.setMsg("success");
+        result.setMsg("login success");
+        result.setData(object);
+        return result;
+    }
+    public static Result registerSuccess(Object object) {
+        Result result = new Result();
+        result.setStatus(1);
+        result.setMsg("register success");
         result.setData(object);
         return result;
     }
@@ -22,9 +29,7 @@ public class ResultErrorUtil {
      *
      * @return
      */
-    public static ResultError success() {
-        return success(null);
-    }
+
     /**
      * 自定义错误信息
      *
@@ -32,8 +37,8 @@ public class ResultErrorUtil {
      * @param msg
      * @return
      */
-    public static ResultError error(Integer code, String msg) {
-        ResultError result = new ResultError();
+    public static Result error(Integer code, String msg) {
+        Result result = new Result();
         result.setStatus(code);
         result.setMsg(msg);
         result.setData(null);
@@ -45,8 +50,8 @@ public class ResultErrorUtil {
      * @param exceptionEnum
      * @return
      */
-    public static ResultError error(EmBusinessErr exceptionEnum) {
-        ResultError result = new ResultError();
+    public static Result error(EmBusinessErr exceptionEnum) {
+        Result result = new Result();
         result.setStatus(exceptionEnum.getCode());
         result.setMsg(exceptionEnum.getMsg());
         result.setData(null);

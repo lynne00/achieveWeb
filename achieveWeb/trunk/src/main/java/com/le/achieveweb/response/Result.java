@@ -1,6 +1,6 @@
 package com.le.achieveweb.response;
 
-public class ResultError<T> {
+public class Result<T> {
     //    error_code 状态值：0 极为成功，其他数值代表失败
     private Integer status;
     //    error_msg 错误信息，若status为0时，为success

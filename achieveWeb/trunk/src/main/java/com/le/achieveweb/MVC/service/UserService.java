@@ -1,8 +1,11 @@
 package com.le.achieveweb.MVC.service;
 
+import com.le.achieveweb.aspect.GlobalExceptionHandler;
 import com.le.achieveweb.error.BusinessException;
 import com.le.achieveweb.error.EmBusinessErr;
+import com.le.achieveweb.response.Result;
 import com.le.achieveweb.util.PasswordUtil;
+import com.le.achieveweb.util.ResultUtil;
 import org.mindrot.jbcrypt.BCrypt;
 import com.le.achieveweb.MVC.dao.UserMapper;
 import com.le.achieveweb.MVC.entity.UserLogin;
@@ -12,12 +15,15 @@ import cn.hutool.core.util.IdUtil;
 
 @Service
 public class UserService {
-    @Autowired
     //autowire:可以对类成员变量、方法以及构造函数进行标注，完成自动装配工作
+    @Autowired
     UserMapper userMapper;//用接口名定义变量：这只是一个接口的引用，接口不能实例化对象，而接口的引用指向的是实现了接口方法的类的实例化对象。
-
+    @Autowired
+    //全局异常处理
+    private GlobalExceptionHandler exceptionHandle;
     // 登录操作
     public String login(UserLogin user) {
+        Result result = ResultUtil.loginSuccess(new Object());
         try {
             UserLogin userExistN = userMapper.queryByName(user.getUsername());
             if (userExistN != null) {
@@ -25,7 +31,7 @@ public class UserService {
                 // 验证密码
                 boolean isPasswordMatch = PasswordUtil.checkPassword(user.getPassword(), userExistP);
                 if (isPasswordMatch) {
-                    return "登录成功";
+                    return result.toString();
                 } else {
                     throw new BusinessException(EmBusinessErr.LOGIN_ACCOUNT_PASSWORD_ERROR, "帐号或密码错误");
                 }
@@ -33,9 +39,9 @@ public class UserService {
                 throw new BusinessException(EmBusinessErr.  LOGIN_ACCOUNT_NOT_EXISTED, "用户名不存在");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return e.getMessage();
+           result=exceptionHandle.exceptionGet(e);
         }
+        return result.toString();
     }
 
 
@@ -56,7 +62,7 @@ public class UserService {
                 String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
                 user.setHashPassword(hashedPassword);
                 userMapper.save(user);
-                return "注册成功";
+                return ResultUtil.registerSuccess(new Object()).toString();
             }
         } catch (Exception e) {
             e.printStackTrace();
