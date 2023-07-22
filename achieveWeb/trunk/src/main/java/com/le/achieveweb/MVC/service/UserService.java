@@ -47,6 +47,7 @@ public class UserService {
 
     // 注册操作
     public String register(UserLogin user) {
+        Result result = ResultUtil.registerSuccess(new Object());
         try {
             UserLogin userExist = userMapper.queryByName(user.getUsername());
             if (user.getUsername().equals("")) {
@@ -62,11 +63,11 @@ public class UserService {
                 String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
                 user.setHashPassword(hashedPassword);
                 userMapper.save(user);
-                return ResultUtil.registerSuccess(new Object()).toString();
+                return result.toString();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            return e.getMessage();
+            result=exceptionHandle.exceptionGet(e);
         }
+        return result.toString();
     }
 }

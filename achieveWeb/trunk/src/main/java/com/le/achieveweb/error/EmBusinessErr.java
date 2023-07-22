@@ -5,7 +5,7 @@ public enum EmBusinessErr implements CommonError {
     LOGIN_ACCOUNT_PASSWORD_ERROR(2001, "账号或密码错误"),
     ACCOUNT_EXISTED(2003, "账号已存在"),
     PARAMETER_INVALIDATION(1000, "参数不合法"),
-    UNKNOWN_ERROR(1000, "未知错误");
+    UNKNOWN_ERROR(000, "未知错误");
     private final Integer errCode;
     private String msg;
     EmBusinessErr(Integer errCode, String msg) {
