@@ -23,6 +23,7 @@ public class UserService {
     private GlobalExceptionHandler exceptionHandle;
     // 登录操作
     public String login(UserLogin user) {
+        //假设登陆成功
         Result result = ResultUtil.loginSuccess(new Object());
         try {
             UserLogin userExistN = userMapper.queryByName(user.getUsername());
@@ -31,9 +32,10 @@ public class UserService {
                 // 验证密码
                 boolean isPasswordMatch = PasswordUtil.checkPassword(user.getPassword(), userExistP);
                 if (isPasswordMatch) {
+                    //返回登陆成功
                     return result.toString();
                 } else {
-                    throw new BusinessException(EmBusinessErr.LOGIN_ACCOUNT_PASSWORD_ERROR, "帐号或密码错误");
+                    throw new BusinessException(EmBusinessErr.LOGIN_ACCOUNT_PASSWORD_ERROR, "用户名或密码错误");
                 }
             } else {
                 throw new BusinessException(EmBusinessErr.  LOGIN_ACCOUNT_NOT_EXISTED, "用户名不存在");
@@ -47,12 +49,13 @@ public class UserService {
 
     // 注册操作
     public String register(UserLogin user) {
+        //假设登陆成功
         Result result = ResultUtil.registerSuccess(new Object());
         try {
             UserLogin userExist = userMapper.queryByName(user.getUsername());
-            if (user.getUsername().equals("")) {
+            if (user.getUsername()==null||user.getUsername().equals("")) {
                 throw new BusinessException(EmBusinessErr.PARAMETER_INVALIDATION, "用户名不能为空");
-            } else if (user.getPassword().equals("")) {
+            } else if (user.getPassword()==null||user.getPassword().equals("")) {
                 throw new BusinessException(EmBusinessErr.PARAMETER_INVALIDATION, "密码不能为空");
             } else if (userExist != null) {
                 throw new BusinessException(EmBusinessErr.ACCOUNT_EXISTED, "帐号已存在");
@@ -63,6 +66,7 @@ public class UserService {
                 String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
                 user.setHashPassword(hashedPassword);
                 userMapper.save(user);
+                //返回注册成功
                 return result.toString();
             }
         } catch (Exception e) {

@@ -27,8 +27,9 @@ public class GlobalExceptionHandler {
             //返回json数据
             return ResultUtil.error(MyException.getCode(), MyException.getMsg());
         }
-        LOGGER.error("系统异常={}", e);
-        return ResultUtil.error(EmBusinessErr. UNKNOWN_ERROR);
+        //在logger中记录未知异常
+        LOGGER.error("系统异常={}", e.toString());
+        return ResultUtil.error(EmBusinessErr.UNKNOWN_ERROR);
 
     }
 }
