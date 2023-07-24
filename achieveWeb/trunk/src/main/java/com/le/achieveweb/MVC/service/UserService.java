@@ -24,7 +24,7 @@ public class UserService {
     // 登录操作
     public String login(UserLogin user) {
         //假设登陆成功
-        Result result = ResultUtil.loginSuccess(new Object());
+        Result result = ResultUtil.loginSuccess();
         try {
             UserLogin userExistN = userMapper.queryByName(user.getUsername());
             if (userExistN != null) {
@@ -49,8 +49,8 @@ public class UserService {
 
     // 注册操作
     public String register(UserLogin user) {
-        //假设登陆成功
-        Result result = ResultUtil.registerSuccess(new Object());
+        //假设注册成功
+        Result result = ResultUtil.registerSuccess();
         try {
             UserLogin userExist = userMapper.queryByName(user.getUsername());
             if (user.getUsername()==null||user.getUsername().equals("")) {

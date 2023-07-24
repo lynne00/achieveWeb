@@ -7,23 +7,24 @@ public class ResultUtil {
     /**
      * 返回成功，传入返回体具体出參
      *
-     * @param object
+     * @param
      * @return
      */
-    public static Result loginSuccess(Object object) {
+    public static Result loginSuccess() {
         Result result = new Result();
         result.setStatus(0);
         result.setMsg("login success");
-        result.setData(object);
+        result.setData(null);
         return result;
     }
-    public static Result registerSuccess(Object object) {
+    public static Result registerSuccess() {
         Result result = new Result();
         result.setStatus(1);
         result.setMsg("register success");
-        result.setData(object);
+        result.setData(null);
         return result;
     }
+
     /**
      * 提供给部分不需要出參的接口
      *

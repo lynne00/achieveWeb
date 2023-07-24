@@ -2,6 +2,8 @@ package com.le.achieveweb.MVC.controller;
 
 import com.le.achieveweb.MVC.entity.UserLogin;
 import com.le.achieveweb.MVC.service.UserService;
+import com.le.achieveweb.util.ResultUtil;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,10 +17,13 @@ public class UserController {
     UserService userService;
     // 登录
     @PostMapping("/login")
-    public String login(@RequestBody UserLogin user) {
-//        @RequestBody UserLogin user
-         return userService.login(user);
-//        return "hello";
+    public String login(@RequestBody UserLogin user, HttpSession session) {
+        String result = userService.login(user);
+        if (result== ResultUtil.loginSuccess().toString()) {
+            session.setAttribute("username", user.getUsername());
+            session.setAttribute("isLoggedIn", true);
+        }
+        return result;
     }
 
     // 注册
