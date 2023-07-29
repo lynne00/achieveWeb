@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.le.achieveweb.MVC.dao.UserMapper">
+    <select id="queryAll" resultType="com.le.achieveweb.MVC.entity.UserLogin">
+        select *from sys_user
+    </select>
+    <select id="queryByName" resultType="com.le.achieveweb.MVC.entity.UserLogin">
+        select *from sys_user
+        where username = #{username}
+    </select>
+    <select id="queryHashPswByName" resultType="string">
+        select hashedPassword from sys_user
+        where username = #{username}
+    </select>
+    <insert id="save">
+        insert into sys_user(id,username, hashedPassword) value (#{id},#{username},#{password})
+    </insert>
+    <delete id="deleteUser" parameterType="com.le.achieveweb.MVC.entity.UserLogin">
+        delete from sys_user
+        where username = #{username}
+    </delete>
+
+</mapper>
