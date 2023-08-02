@@ -1,35 +1,27 @@
 package com.le.achieveweb.util;
 
+import com.le.achieveweb.error.BusinessException;
 import com.le.achieveweb.error.EmBusinessErr;
 import com.le.achieveweb.response.Result;
 
 public class ResultUtil {
     /**
-     * 返回成功，传入返回体具体出參
+     * 成功信息
      *
-     * @param
      * @return
      */
-    public static Result loginSuccess() {
+    public static Result success() {
+        return success(null);
+    }
+
+    public static Result success(Object data) {
         Result result = new Result();
         result.setStatus(0);
-        result.setMsg("login success");
-        result.setData(null);
-        return result;
-    }
-    public static Result registerSuccess() {
-        Result result = new Result();
-        result.setStatus(1);
-        result.setMsg("register success");
-        result.setData(null);
+        result.setMsg("success");
+        result.setData(data);
         return result;
     }
 
-    /**
-     * 提供给部分不需要出參的接口
-     *
-     * @return
-     */
 
     /**
      * 自定义错误信息
@@ -48,10 +40,24 @@ public class ResultUtil {
     /**
      * 返回异常信息，在已知的范围内
      *
-     * @param exceptionEnum
+     * @param exceptionEnum EmBusinessErr枚举类定义错误信息
      * @return
      */
     public static Result error(EmBusinessErr exceptionEnum) {
+        Result result = new Result();
+        result.setStatus(exceptionEnum.getCode());
+        result.setMsg(exceptionEnum.getMsg());
+        result.setData(null);
+        return result;
+    }
+
+    /**
+     * 返回异常信息，在已知的范围内
+     *
+     * @param exceptionEnum BusinessException自定义异常类
+     * @return
+     */
+    public static Result error(BusinessException exceptionEnum) {
         Result result = new Result();
         result.setStatus(exceptionEnum.getCode());
         result.setMsg(exceptionEnum.getMsg());

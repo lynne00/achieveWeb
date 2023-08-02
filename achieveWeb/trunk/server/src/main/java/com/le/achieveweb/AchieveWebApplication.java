@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @SpringBootApplication
-@MapperScan("com.le.achieveweb.MVC.dao")
+@MapperScan("com.le.achieveweb.mvc.dao")
 public class AchieveWebApplication {
 
     public static void main(String[] args) {

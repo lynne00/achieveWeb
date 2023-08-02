@@ -30,7 +30,7 @@ public class Result<T> {
     }
     @Override
     public String toString() {
-        return "Result{" +
+        return "{" +
                 "status=" + status +
                 ", msg='" + msg + '\'' +
                 ", data=" + data +

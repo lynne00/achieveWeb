@@ -1,14 +1,18 @@
 <template>
     <div class="login-box">
-        <p>登录</p>
-        <form ref="userform" :model="user">
+        <p>{{ isLogin ? "登录" : "注册" }}</p>
+        <form :model="user">
             <div class="user-box">
                 <input required="" name="username" type="text" v-model="user.username">
-                <label>用户名</label>
+                <label>请输入用户名</label>
             </div>
             <div class="user-box">
                 <input required="" name="" type="password" v-model="user.password">
-                <label>密码</label>
+                <label>请输入密码</label>
+            </div>
+            <div v-if="!isLogin" class="user-box">
+                <input required="" name="" type="password" v-model="user.passwordAgain">
+                <label>再次输入密码</label>
             </div>
             <a href="#" id="loginButton" @click="handleLogin()">
                 <span></span>
@@ -18,59 +22,87 @@
                 提交
             </a>
         </form>
-        <p>没有账号？点此<router-link to="/register" class="a2">注册！</router-link></p>
+        <p>{{ isLogin ? "没" : "已" }}有账号？点此<a href="#" class="a2" @click="toggleLogin()">{{ isLogin ? "注册！" : "登录！" }}</a></p>
     </div>
 </template>
-  
-<script>
+<!-- 组合式 --> 
+<script setup>
+import { ref } from 'vue'
 import { hashPassword } from "@/utils/passwordUtil";
 import request from "@/utils/request";
 
-export default {
-    data() {
-        return {
-            user: {
-                username: "",
-                password: ""
-            }
+const isLogin = ref(true)
+const user = ref({
+    username: "",
+    password: ""
+})
+const handleLogin = () => {
+    // 使用 SHA-512 对密码进行哈希处理
+    const hashedPassword = hashPassword(user.value.password);
+    request.post("/userLogin/login", {
+        username: user.value.username,
+        password: hashedPassword
+    }).then(result => {
+        console.log(result.data)
+        if (result.data.msg === 'success') {
+            console.log(1, result.status)
         }
-    },
-    methods: {
-        handleLogin() {
-          // 使用 SHA-512 对密码进行哈希处理
-            const hashedPassword = hashPassword(this.user.password);
-            request.post("/userLogin/login", {
-                username: this.user.username,
-                password: hashedPassword
-            }).then(result => {
-                console.log(result.data)
-                if (result.data.match("success")) {
-                    console.log(1, result.status)
-                }
-                else {
-                    console.log(222, result.data)
-                }
-            });
+        else {
+            console.log(222, result.data)
         }
+    });
+}
+const toggleLogin = () => {
+    isLogin.value = !isLogin.value
+    user.value = {
+        username: "",
+        password: ""
     }
 }
+// 选项式
+// export default {
+//     data() {
+//         return {
+//             user: {
+//                 username: "",
+//                 password: ""
+//             }
+//         }
+//     },
+//     methods: {
+//         handleLogin() {
+//             // 使用 SHA-512 对密码进行哈希处理
+//             const hashedPassword = hashPassword(this.user.password);
+//             request.post("/userLogin/login", {
+//                 username: this.user.username,
+//                 password: hashedPassword
+//             }).then(result => {
+//                 console.log(result.data)
+//                 if (result.data.msg === 'success') {
+//                     console.log(1, result.status)
+//                 }
+//                 else {
+//                     console.log(222, result.data)
+//                 }
+//             });
+//         }
+//     }
+// }
 </script>
   
 <style scoped>
 .login-box {
     position: absolute;
-    top: 50%;
+    top: 46%;
     left: 50%;
     width: 400px;
     padding: 40px;
-    margin: 20px auto;
-    transform: translate(-50%, -55%);
-    background: rgba(0, 0, 0, .9);
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
     box-sizing: border-box;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, .6);
-    border-radius: 10px;
+    box-shadow: 35px 35px rgba(0, 0, 0, .6);
+    border-radius: 20px;
 }
-
 .login-box p:first-child {
     margin: 0 0 30px;
     padding: 0;
@@ -92,7 +124,7 @@ export default {
     color: #fff;
     margin-bottom: 30px;
     border: none;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid #ffc9c9;
     outline: none;
     background: transparent;
 }
@@ -107,8 +139,9 @@ export default {
     pointer-events: none;
     transition: .5s;
 }
-
+/* 当用户在输入框获得焦点时，其后的标签 <label> 将会被选择。 */
 .login-box .user-box input:focus~label,
+/* 当该 <input> 元素的内容满足其设定的校验条件时，选择其后的所有 <label> 元素 */
 .login-box .user-box input:valid~label {
     top: -20px;
     left: 0;
@@ -124,7 +157,6 @@ export default {
     color: #fff;
     font-size: 16px;
     text-decoration: none;
-    text-transform: uppercase;
     overflow: hidden;
     transition: .5s;
     margin-top: 12px;
@@ -147,6 +179,10 @@ export default {
     left: -100%;
     width: 100%;
     height: 2px;
+     /* linear-gradient 是一种线性渐变的背景样式     
+    180deg: 表示渐变的方向，以角度来指定。在这里，180deg 表示从上到下的垂直渐变。
+    transparent: 渐变的起始颜色。在这里，transparent 表示起始颜色为透明。
+    #fff: 渐变的结束颜色。在这里，#fff 表示结束颜色为白色。 */
     background: linear-gradient(90deg, transparent, #fff);
     animation: btn-anim1 1.5s linear infinite;
 }

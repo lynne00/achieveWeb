@@ -1,6 +1,6 @@
-package com.le.achieveweb.MVC.dao;
+package com.le.achieveweb.mvc.dao;
 
-import com.le.achieveweb.MVC.entity.UserLogin;
+import com.le.achieveweb.mvc.entity.UserLogin;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
