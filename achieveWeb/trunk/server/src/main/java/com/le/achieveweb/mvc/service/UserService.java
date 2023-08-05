@@ -2,6 +2,7 @@ package com.le.achieveweb.mvc.service;
 
 import com.le.achieveweb.error.BusinessException;
 import com.le.achieveweb.error.EmBusinessErr;
+import com.le.achieveweb.mvc.model.vo.LoginView;
 import com.le.achieveweb.response.Result;
 import com.le.achieveweb.util.Constants;
 import com.le.achieveweb.util.PasswordUtil;
@@ -9,7 +10,7 @@ import com.le.achieveweb.util.ResultUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import com.le.achieveweb.mvc.dao.UserMapper;
-import com.le.achieveweb.mvc.entity.UserLogin;
+import com.le.achieveweb.mvc.model.entity.UserLogin;
 import org.springframework.stereotype.Service;
 import cn.hutool.core.util.IdUtil;
 
@@ -23,9 +24,19 @@ public class UserService {
 //        this.userMapper = userMapper;
 //    }ss
     // 登录操作
-    public Result login(UserLogin user, HttpSession session) {
+    public Result login(LoginView user , HttpSession session) {
+        String verCode = (String) session.getAttribute(Constants.CAPTCHACODE);
         UserLogin userExistN = userMapper.queryByName(user.getUsername());
-        if (userExistN != null) {
+        if(verCode==null){
+            throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_TIMEOUT);
+        }
+        else if (user.getCaptchaCode()==null) {
+            throw new BusinessException(EmBusinessErr.INPUT_BLANK);
+        }
+        else if(!verCode.equals(user.getCaptchaCode())){
+            throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_ERROR);
+        }
+        else if (userExistN != null) {
             String userExistP = userMapper.queryHashPswByName(user.getUsername());
             // 验证密码
             boolean isPasswordMatch = PasswordUtil.checkPassword(user.getPassword(), userExistP);
@@ -47,9 +58,7 @@ public class UserService {
     public Result register(UserLogin user) {
         UserLogin userExist = userMapper.queryByName(user.getUsername());
         if (user.getUsername() == null || user.getUsername().equals("")) {
-            throw new BusinessException(EmBusinessErr.PARAMETER_INVALIDATION);
-        } else if (user.getPassword() == null || user.getPassword().equals("")) {
-            throw new BusinessException(EmBusinessErr.PARAMETER_INVALIDATION);
+            throw new BusinessException(EmBusinessErr.INPUT_BLANK);
         } else if (userExist != null) {
             throw new BusinessException(EmBusinessErr.ACCOUNT_EXISTED);
         } else {

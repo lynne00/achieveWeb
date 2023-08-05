@@ -1,4 +1,4 @@
-package com.le.achieveweb.mvc.entity;
+package com.le.achieveweb.mvc.model.entity;
 
 import lombok.*;
 //不需要再写getter、setter、equals、toString方法

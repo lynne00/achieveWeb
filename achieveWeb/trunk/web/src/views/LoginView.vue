@@ -14,6 +14,13 @@
                 <input required="" name="" type="password" v-model="user.passwordAgain">
                 <label>再次输入密码</label>
             </div>
+            <div v-if="isLogin" class="user-box">
+                <input required="" name="" type="text" v-model="user.captchaCode">
+                <label>请输入验证码 </label>
+                <div class="getCaptcha">
+                    <img :src="codeImg" @click="getimgCaptcha()" title="看不清，点击换一张" loading="lazy" alt="验证码" />
+                </div>
+            </div>
             <a href="#" id="loginButton" @click="handleLogin()">
                 <span></span>
                 <span></span>
@@ -22,41 +29,85 @@
                 提交
             </a>
         </form>
-        <p>{{ isLogin ? "没" : "已" }}有账号？点此<a href="#" class="a2" @click="toggleLogin()">{{ isLogin ? "注册！" : "登录！" }}</a></p>
+        <p>{{ isLogin ? "没" : "已" }}有账号？点此<a href="#" class="a2" @click="toggleLogin()">{{ isLogin ? "注册！" : "登录！" }}</a>
+        </p>
     </div>
 </template>
 <!-- 组合式 --> 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue';
 import { hashPassword } from "@/utils/passwordUtil";
 import request from "@/utils/request";
 
+
+//切换登录/注册页面
 const isLogin = ref(true)
 const user = ref({
     username: "",
-    password: ""
+    password: "",
+    captchaCode: ""
 })
+
+onMounted(() => {
+    // 组件挂载后调用验证码函数
+    getimgCaptcha();
+});
+const codeImg = ref("")
+//像后端获取验证码
+const getimgCaptcha = () => {
+    request.post("/captcha").then(result => {
+        console.log(result);
+        codeImg.value = result.data;
+    });
+};
+//处理登录/注册
 const handleLogin = () => {
-    // 使用 SHA-512 对密码进行哈希处理
     const hashedPassword = hashPassword(user.value.password);
-    request.post("/userLogin/login", {
-        username: user.value.username,
-        password: hashedPassword
-    }).then(result => {
-        console.log(result.data)
-        if (result.data.msg === 'success') {
-            console.log(1, result.status)
+    // 使用 SHA-512 对密码进行哈希处理
+    if (isLogin.value) {
+        request.post("/userLogin/login", {
+            username: user.value.username,
+            password: hashedPassword,
+            captchaCode: user.value.captchaCode
+        }).then(result => {
+            console.log(result.data)
+            if (result.data.msg === 'success') {
+                console.log(1, result.status)
+            }
+            else {
+                console.log(222, result.data)
+            }
+        });
+    }
+    else {
+        if (user.value.password !== user.value.passwordAgain) {
+            console.log("两次输入密码不一致")
         }
         else {
-            console.log(222, result.data)
+            request.post("/userLogin/register", {
+                username: user.value.username,
+                password: hashedPassword
+            }).then(result => {
+                console.log(result.data)
+                if (result.data.msg === 'success') {
+                    console.log(1, result.status)
+                }
+                else {
+                    console.log(222, result.data)
+                }
+            });
         }
-    });
+    }
 }
 const toggleLogin = () => {
     isLogin.value = !isLogin.value
     user.value = {
         username: "",
-        password: ""
+        password: "",
+        captchaCode: ""
+    }
+    if (isLogin.value) {
+        getimgCaptcha();
     }
 }
 // 选项式
@@ -103,6 +154,7 @@ const toggleLogin = () => {
     box-shadow: 35px 35px rgba(0, 0, 0, .6);
     border-radius: 20px;
 }
+
 .login-box p:first-child {
     margin: 0 0 30px;
     padding: 0;
@@ -139,6 +191,7 @@ const toggleLogin = () => {
     pointer-events: none;
     transition: .5s;
 }
+
 /* 当用户在输入框获得焦点时，其后的标签 <label> 将会被选择。 */
 .login-box .user-box input:focus~label,
 /* 当该 <input> 元素的内容满足其设定的校验条件时，选择其后的所有 <label> 元素 */
@@ -147,6 +200,12 @@ const toggleLogin = () => {
     left: 0;
     color: #fff;
     font-size: 12px;
+}
+
+.getCaptcha {
+    position: absolute;
+    top: -20px;
+    right: 5px;
 }
 
 .login-box form a {
@@ -179,7 +238,7 @@ const toggleLogin = () => {
     left: -100%;
     width: 100%;
     height: 2px;
-     /* linear-gradient 是一种线性渐变的背景样式     
+    /* linear-gradient 是一种线性渐变的背景样式     
     180deg: 表示渐变的方向，以角度来指定。在这里，180deg 表示从上到下的垂直渐变。
     transparent: 渐变的起始颜色。在这里，transparent 表示起始颜色为透明。
     #fff: 渐变的结束颜色。在这里，#fff 表示结束颜色为白色。 */
