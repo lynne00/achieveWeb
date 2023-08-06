@@ -6,10 +6,10 @@
         select *
         from sys_user
     </select>
-    <select id="queryByName" resultType="com.le.achieveweb.mvc.model.entity.UserLogin">
+    <select id="queryByNameRole" resultType="com.le.achieveweb.mvc.model.entity.UserLogin">
         select *
         from sys_user
-        where username = #{username}
+        where username = #{username} and role =#{role}
     </select>
     <select id="queryHashPswByName" resultType="string">
         select hashedPassword
@@ -17,7 +17,7 @@
         where username = #{username}
     </select>
     <insert id="save">
-        insert into sys_user(id, username, hashedPassword) value (#{id}, #{username}, #{password})
+        insert into sys_user(id, username, hashedPassword,role) value (#{id}, #{username}, #{password},'1')
     </insert>
     <delete id="deleteUser" parameterType="com.le.achieveweb.mvc.model.entity.UserLogin">
         delete

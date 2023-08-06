@@ -21,6 +21,14 @@
                     <img :src="codeImg" @click="getimgCaptcha()" title="看不清，点击换一张" loading="lazy" alt="验证码" />
                 </div>
             </div>
+            <n-radio-group class="login-radio" v-if="isLogin" v-model:value="roleNum" name="radiogroup">
+                <n-space>
+                    <n-radio style=";" v-for="role in roles" :key="role.value" :value="role.value">
+                        <div style="font-size: 5px;color: #fff;"> {{ role.label }}</div>
+                    </n-radio>
+                </n-space>
+            </n-radio-group>
+            <p v-if="!isLogin">此注册只用于注册用户帐号</p>
             <a href="#" id="loginButton" @click="handleLogin()">
                 <span></span>
                 <span></span>
@@ -39,7 +47,6 @@ import { ref, onMounted } from 'vue';
 import { hashPassword } from "@/utils/passwordUtil";
 import request from "@/utils/request";
 
-
 //切换登录/注册页面
 const isLogin = ref(true)
 const user = ref({
@@ -47,9 +54,19 @@ const user = ref({
     password: "",
     captchaCode: ""
 })
+const roleNum = ref('1')
+const roles = ref([
+    {
+        value: '1',
+        label: '用户'
+    }, {
+        value: '0',
+        label: '管理员'
+    }
+])
 
 onMounted(() => {
-    // 组件挂载后调用验证码函数
+    //组件挂载后调用验证码函数
     getimgCaptcha();
 });
 const codeImg = ref("")
@@ -68,7 +85,8 @@ const handleLogin = () => {
         request.post("/userLogin/login", {
             username: user.value.username,
             password: hashedPassword,
-            captchaCode: user.value.captchaCode
+            captchaCode: user.value.captchaCode,
+            role:roleNum.value
         }).then(result => {
             console.log(result.data)
             if (result.data.msg === 'success') {
@@ -141,7 +159,7 @@ const toggleLogin = () => {
 // }
 </script>
   
-<style scoped>
+<style scoped lang="scss">
 .login-box {
     position: absolute;
     top: 46%;
@@ -156,7 +174,7 @@ const toggleLogin = () => {
 }
 
 .login-box p:first-child {
-    margin: 0 0 30px;
+    margin: 0 0 10px;
     padding: 0;
     color: #fff;
     text-align: center;
@@ -174,7 +192,7 @@ const toggleLogin = () => {
     padding: 10px 0;
     font-size: 16px;
     color: #fff;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     border: none;
     border-bottom: 1px solid #ffc9c9;
     outline: none;
@@ -204,8 +222,15 @@ const toggleLogin = () => {
 
 .getCaptcha {
     position: absolute;
-    top: -20px;
+    top: -10px;
     right: 5px;
+}
+
+.login-radio {
+    position: absolute;
+    margin-top: -15px;
+    left: 40px;
+    color: #fff;
 }
 
 .login-box form a {
@@ -320,9 +345,18 @@ const toggleLogin = () => {
     }
 }
 
+.login-box p:nth-last-child(2) {
+    position: absolute;
+    color: #aaa;
+    font-size: 5px;
+    margin-top: -15px;
+    left: 40px;
+}
+
 .login-box p:last-child {
     color: #aaa;
     font-size: 14px;
+    margin-top: 0;
 }
 
 .login-box a.a2 {

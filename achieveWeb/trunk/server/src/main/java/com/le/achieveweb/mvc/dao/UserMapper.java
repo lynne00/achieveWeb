@@ -13,7 +13,7 @@ import java.util.List;
 public interface UserMapper {
     List<UserLogin> queryAll();
 
-    UserLogin queryByName(String username);
+    UserLogin queryByNameRole(String username,String role);
 
     String  queryHashPswByName(String username);
 

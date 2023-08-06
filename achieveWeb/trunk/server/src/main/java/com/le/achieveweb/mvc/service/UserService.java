@@ -26,7 +26,7 @@ public class UserService {
     // 登录操作
     public Result login(LoginView user , HttpSession session) {
         String verCode = (String) session.getAttribute(Constants.CAPTCHACODE);
-        UserLogin userExistN = userMapper.queryByName(user.getUsername());
+        UserLogin userExistN = userMapper.queryByNameRole(user.getUsername(), user.getRole());
         if(verCode==null){
             throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_TIMEOUT);
         }
@@ -56,7 +56,7 @@ public class UserService {
 
     // 注册操作
     public Result register(UserLogin user) {
-        UserLogin userExist = userMapper.queryByName(user.getUsername());
+        UserLogin userExist = userMapper.queryByNameRole(user.getUsername(), user.getRole());
         if (user.getUsername() == null || user.getUsername().equals("")) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
         } else if (userExist != null) {

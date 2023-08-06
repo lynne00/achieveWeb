@@ -21,7 +21,7 @@ public class CaptchaController {
     @ResponseBody
     @RequestMapping("/captcha")
     public String captcha(HttpSession session) throws Exception {
-        SpecCaptcha specCaptcha = new SpecCaptcha(130, 48, 5);
+        SpecCaptcha specCaptcha = new SpecCaptcha(130, 40, 5);
         String verCode = specCaptcha.text().toLowerCase();
         session.setAttribute(Constants.CAPTCHACODE, verCode);
         return specCaptcha.toBase64();

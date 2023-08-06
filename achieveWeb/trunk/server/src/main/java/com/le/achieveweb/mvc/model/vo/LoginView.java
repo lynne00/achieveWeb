@@ -6,4 +6,5 @@ public class LoginView {
     private String username;
     private String password;
     private String captchaCode;
+    private String role;
 }
