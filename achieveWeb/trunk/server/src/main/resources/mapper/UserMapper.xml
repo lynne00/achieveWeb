@@ -6,6 +6,11 @@
         select *
         from sys_user
     </select>
+    <select id="queryByName" resultType="com.le.achieveweb.mvc.model.entity.UserLogin">
+        select *
+        from sys_user
+        where username = #{username}
+    </select>
     <select id="queryByNameRole" resultType="com.le.achieveweb.mvc.model.entity.UserLogin">
         select *
         from sys_user

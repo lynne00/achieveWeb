@@ -12,6 +12,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     List<UserLogin> queryAll();
+    UserLogin queryByName(String username);
 
     UserLogin queryByNameRole(String username,String role);
 

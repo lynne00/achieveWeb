@@ -56,7 +56,7 @@ public class UserService {
 
     // 注册操作
     public Result register(UserLogin user) {
-        UserLogin userExist = userMapper.queryByNameRole(user.getUsername(), user.getRole());
+        UserLogin userExist = userMapper.queryByName(user.getUsername());
         if (user.getUsername() == null || user.getUsername().equals("")) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
         } else if (userExist != null) {
