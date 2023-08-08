@@ -10,9 +10,11 @@ import com.le.achieveweb.util.ResultUtil;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import com.le.achieveweb.mvc.dao.UserMapper;
-import com.le.achieveweb.mvc.model.entity.UserLogin;
+import com.le.achieveweb.mvc.model.entity.User;
 import org.springframework.stereotype.Service;
 import cn.hutool.core.util.IdUtil;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 
 @Service
 //代替Autowired，可以用来确保对于一个类的所有实例被正确地初始化。参数类型必须要是final的
@@ -26,7 +28,7 @@ public class UserService {
     // 登录操作
     public Result login(LoginView user , HttpSession session) {
         String verCode = (String) session.getAttribute(Constants.CAPTCHACODE);
-        UserLogin userExistN = userMapper.queryByNameRole(user.getUsername(), user.getRole());
+        User userExistN = userMapper.queryByNameRole(user.getUsername(), user.getRole());
         if(verCode==null){
             throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_TIMEOUT);
         }
@@ -36,7 +38,7 @@ public class UserService {
         else if(!verCode.equals(user.getCaptchaCode())){
             throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_ERROR);
         }
-        else if (userExistN != null) {
+        if (userExistN != null) {
             String userExistP = userMapper.queryHashPswByName(user.getUsername());
             // 验证密码
             boolean isPasswordMatch = PasswordUtil.checkPassword(user.getPassword(), userExistP);
@@ -55,8 +57,8 @@ public class UserService {
 
 
     // 注册操作
-    public Result register(UserLogin user) {
-        UserLogin userExist = userMapper.queryByName(user.getUsername());
+    public Result register(User user) {
+        User userExist = userMapper.queryByName(user.getUsername());
         if (user.getUsername() == null || user.getUsername().equals("")) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
         } else if (userExist != null) {
@@ -67,9 +69,29 @@ public class UserService {
             // BCrypt对密码进行加密
             String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
+            user.setCreated_at(LocalDateTime.now());
+            user.setUpdate_at(LocalDateTime.now());
             userMapper.save(user);
             //返回注册成功
             return ResultUtil.success();
+        }
+    }
+    // 用户信息修改
+    public User updateInfo(User user,HttpSession session) {
+        User userInfo;
+        if(user.getUsername()==null) {
+            userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
+            return userInfo;
+        }
+        else{
+            HashMap<String,Object> map = new HashMap();
+            map.put("username",session.getAttribute(Constants.USERNAME));
+            map.put("sex",user.getSex());
+            map.put("email",user.getEmail());
+            map.put("update_at",LocalDateTime.now());
+            userMapper.updateUserInfo(map);
+            userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
+            return userInfo;
         }
     }
 }
