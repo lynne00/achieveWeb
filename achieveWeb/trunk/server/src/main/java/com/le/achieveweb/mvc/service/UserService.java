@@ -13,6 +13,7 @@ import com.le.achieveweb.mvc.dao.UserMapper;
 import com.le.achieveweb.mvc.model.entity.User;
 import org.springframework.stereotype.Service;
 import cn.hutool.core.util.IdUtil;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -22,20 +23,19 @@ import java.util.HashMap;
 public class UserService {
     //用接口名定义变量：这只是一个接口的引用，接口不能实例化对象，而接口的引用指向的是实现了接口方法的类的实例化对象。
     private final UserMapper userMapper;
-//    public UserService(UserMapper userMapper) {
+
+    //    public UserService(UserMapper userMapper) {
 //        this.userMapper = userMapper;
 //    }ss
     // 登录操作
-    public Result login(LoginView user , HttpSession session) {
+    public Result login(LoginView user, HttpSession session) {
         String verCode = (String) session.getAttribute(Constants.CAPTCHACODE);
         User userExistN = userMapper.queryByNameRole(user.getUsername(), user.getRole());
-        if(verCode==null){
+        if (verCode == null) {
             throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_TIMEOUT);
-        }
-        else if (user.getCaptchaCode()==null) {
+        } else if (user.getCaptchaCode() == null) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
-        }
-        else if(!verCode.equals(user.getCaptchaCode())){
+        } else if (!verCode.equals(user.getCaptchaCode())) {
             throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_ERROR);
         }
         if (userExistN != null) {
@@ -55,7 +55,6 @@ public class UserService {
         }
     }
 
-
     // 注册操作
     public Result register(User user) {
         User userExist = userMapper.queryByName(user.getUsername());
@@ -69,29 +68,30 @@ public class UserService {
             // BCrypt对密码进行加密
             String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
-            user.setCreated_at(LocalDateTime.now());
-            user.setUpdate_at(LocalDateTime.now());
+            user.setCreatedAt(LocalDateTime.now());
+            user.setUpdateAt(LocalDateTime.now());
             userMapper.save(user);
             //返回注册成功
             return ResultUtil.success();
         }
     }
+
+    //获取用户信息
+    public User getInfo(HttpSession session) {
+        User userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
+        return userInfo;
+    }
+
     // 用户信息修改
-    public User updateInfo(User user,HttpSession session) {
+    public User updateInfo(User user, HttpSession session) {
         User userInfo;
-        if(user.getUsername()==null) {
-            userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
-            return userInfo;
-        }
-        else{
-            HashMap<String,Object> map = new HashMap();
-            map.put("username",session.getAttribute(Constants.USERNAME));
-            map.put("sex",user.getSex());
-            map.put("email",user.getEmail());
-            map.put("update_at",LocalDateTime.now());
-            userMapper.updateUserInfo(map);
-            userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
-            return userInfo;
-        }
+        HashMap<String, Object> map = new HashMap();
+        map.put("username", session.getAttribute(Constants.USERNAME));
+        map.put("sex", user.getSex());
+        map.put("email", user.getEmail());
+        map.put("update_at", LocalDateTime.now());
+        userMapper.updateUserInfo(map);
+        userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
+        return userInfo;
     }
 }

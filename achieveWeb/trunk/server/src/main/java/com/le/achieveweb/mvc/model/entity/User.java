@@ -12,7 +12,7 @@ public class User {
     private String password;
     private String role;
     private String sex;
-    private LocalDateTime created_at;
-    private LocalDateTime update_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updateAt;
     private String email;
 }

@@ -30,8 +30,15 @@ public class UserController {
         return userService.register(user);
     }
 
+    //获取用户信息
+    @RequestMapping("/getInfo")
+    @ResponseBody
+    public User getInfo(HttpSession session) {
+        return userService.getInfo(session);
+    }
+
     //修改用户信息
-    @RequestMapping("/userinfo")
+    @RequestMapping("/updateInfo")
     @ResponseBody
     public User updateInfo(@RequestBody User user,HttpSession session) {
         return userService.updateInfo(user,session);
