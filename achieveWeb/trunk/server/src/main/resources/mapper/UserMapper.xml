@@ -23,11 +23,16 @@
     </select>
     <insert id="save">
         insert into sys_user(id, username, hashedPassword, role, created_at, update_at)
-        value (#{id}, #{username}, #{password}, '1', #{created_at}, #{update_at})
+        value (#{id}, #{username}, #{password}, '1', #{createdAt}, #{updateAt})
     </insert>
     <update id="updateUserInfo" parameterType="com.le.achieveweb.mvc.model.entity.User">
-        update  sys_user
-        set sex=#{sex}, email=#{email}, update_at=#{update_at}
+        update sys_user
+        set sex=#{sex}, email=#{email}, update_at=#{updateAt}
+        where username = #{username} limit 1
+    </update>
+    <update id="updateUserPassword" parameterType="com.le.achieveweb.mvc.model.entity.User">
+        update sys_user
+        set hashedPassword=#{password}
         where username = #{username} limit 1
     </update>
     <delete id="deleteUser" parameterType="com.le.achieveweb.mvc.model.entity.User">

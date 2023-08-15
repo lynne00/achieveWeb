@@ -1,4 +1,4 @@
-package com.le.achieveweb.mvc.controller;
+package com.le.achieveweb.mvc.controller.user;
 
 import com.le.achieveweb.mvc.model.entity.User;
 import com.le.achieveweb.mvc.model.vo.LoginView;
@@ -30,17 +30,31 @@ public class UserController {
         return userService.register(user);
     }
 
+    //注销
+    @RequestMapping("/logOut")
+    @ResponseBody
+    public Result loginOut(HttpSession session) {
+        return userService.logOut(session);
+    }
+
     //获取用户信息
     @RequestMapping("/getInfo")
     @ResponseBody
-    public User getInfo(HttpSession session) {
+    public Result getInfo(HttpSession session) {
         return userService.getInfo(session);
     }
 
     //修改用户信息
     @RequestMapping("/updateInfo")
     @ResponseBody
-    public User updateInfo(@RequestBody User user,HttpSession session) {
+    public Result updateInfo(@RequestBody User user,HttpSession session) {
         return userService.updateInfo(user,session);
+    }
+
+    //修改用户密码
+    @RequestMapping("/updatePassword")
+    @ResponseBody
+    public Result updateInfo(@RequestBody String password,HttpSession session) {
+        return userService.updatePassword(password,session);
     }
 }

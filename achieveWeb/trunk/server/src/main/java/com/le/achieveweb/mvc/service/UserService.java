@@ -46,7 +46,7 @@ public class UserService {
                 // 登陆成功 设置session 标记登录用户名和登陆状态
                 session.setAttribute(Constants.USERNAME, user.getUsername());
                 session.setAttribute(Constants.IS_LOGGED_IN, true);
-                return ResultUtil.success();
+                return ResultUtil.success("登录成功");
             } else {
                 throw new BusinessException(EmBusinessErr.LOGIN_ACCOUNT_PASSWORD_ERROR);
             }
@@ -68,30 +68,50 @@ public class UserService {
             // BCrypt对密码进行加密
             String hashedPassword = PasswordUtil.hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
+            //设置创建时间和修改时间
             user.setCreatedAt(LocalDateTime.now());
             user.setUpdateAt(LocalDateTime.now());
             userMapper.save(user);
             //返回注册成功
-            return ResultUtil.success();
+            return ResultUtil.success("注册成功");
         }
     }
 
+    //注销帐号
+    public Result logOut(HttpSession session) {
+        session.invalidate();
+        return ResultUtil.success("退出成功");
+    }
+
     //获取用户信息
-    public User getInfo(HttpSession session) {
+    public Result getInfo(HttpSession session) {
         User userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
-        return userInfo;
+        return ResultUtil.success(userInfo);
     }
 
     // 用户信息修改
-    public User updateInfo(User user, HttpSession session) {
+    public Result updateInfo(User user, HttpSession session) {
         User userInfo;
         HashMap<String, Object> map = new HashMap();
         map.put("username", session.getAttribute(Constants.USERNAME));
         map.put("sex", user.getSex());
         map.put("email", user.getEmail());
-        map.put("update_at", LocalDateTime.now());
+        map.put("updateAt", LocalDateTime.now());
         userMapper.updateUserInfo(map);
         userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
-        return userInfo;
+        return ResultUtil.success(userInfo);
     }
+
+    // 用户修改密码
+    public Result updatePassword(String password, HttpSession session) {
+        HashMap<String, Object> map = new HashMap();
+        // BCrypt对密码进行加密
+        String hashedPassword = PasswordUtil.hashPassword(password);
+        map.put("password",hashedPassword);
+        map.put("username", session.getAttribute(Constants.USERNAME));
+        userMapper.updateUserPassword(map);
+        return ResultUtil.success("修改成功");
+    }
+
+
 }

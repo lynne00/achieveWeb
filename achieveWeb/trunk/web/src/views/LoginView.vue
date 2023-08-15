@@ -82,7 +82,7 @@ const handleLogin = () => {
     const hashedPassword = hashPassword(user.value.password);
     // 使用 SHA-512 对密码进行哈希处理
     if (isLogin.value) {
-        request.post("/userLogin/login", {
+        request.post("/achieve/login", {
             username: user.value.username,
             password: hashedPassword,
             captchaCode: user.value.captchaCode,
@@ -102,7 +102,7 @@ const handleLogin = () => {
             console.log("两次输入密码不一致")
         }
         else {
-            request.post("/userLogin/register", {
+            request.post("/achieve/register", {
                 username: user.value.username,
                 password: hashedPassword
             }).then(result => {
@@ -174,7 +174,7 @@ const toggleLogin = () => {
 }
 
 .login-box p:first-child {
-    margin: 0 0 10px;
+    margin: 0 0 25px;
     padding: 0;
     color: #fff;
     text-align: center;
@@ -192,7 +192,7 @@ const toggleLogin = () => {
     padding: 10px 0;
     font-size: 16px;
     color: #fff;
-    margin-bottom: 25px;
+    margin-bottom: 24px;
     border: none;
     border-bottom: 1px solid #ffc9c9;
     outline: none;
@@ -203,7 +203,7 @@ const toggleLogin = () => {
     position: absolute;
     top: 0;
     left: 0;
-    padding: 10px 0;
+    padding: 7px 0;
     font-size: 16px;
     color: #fff;
     pointer-events: none;
