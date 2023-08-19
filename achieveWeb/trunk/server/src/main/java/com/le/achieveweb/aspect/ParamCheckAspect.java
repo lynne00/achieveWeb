@@ -27,7 +27,7 @@ public class ParamCheckAspect {
     private GlobalExceptionHandler exceptionHandle;
 
     // Pointcut用来定义一个切点,拦截所有Controller中的方法
-    @Pointcut("execution(public * com.le.achieveweb.mvc.controller.*.*(..))")
+    @Pointcut("execution(public * com.le.achieveweb.mvc.controller..*.*(..))")
     //切入点方法(仅仅用于提供一个切入点标识符，供后面的通知注解引用)
     public void log() {
     }

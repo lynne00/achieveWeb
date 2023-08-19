@@ -1,6 +1,5 @@
 package com.le.achieveweb.mvc.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import java.time.LocalDateTime;
 //不需要再写getter、setter、equals、toString方法

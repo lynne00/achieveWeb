@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.le.achieveweb.mvc.dao.AchieveMapper">
+    <insert id="saveCategory">
+        insert into t_goal_category(id, user_id, category_name)
+            value (#{id}, #{userId}, #{categoryName})
+    </insert>
+    <insert id="saveItem">
+        insert into t_goal_item(id, user_id, goal_category_id, item_name)
+            value (#{id}, #{userId} ,#{goalCategoryId}, #{itemName})
+    </insert>
+    <insert id="saveItemRecord">
+        insert into t_goal_record(id, user_id, item_id, reach_quantity, reach_date, create_at)
+            value (#{id}, #{userId}, #{itemId}, #{reachQuantity}, #{reachDate}, #{createAt})
+    </insert>
+    <insert id="saveTag">
+        insert into t_goal_tag(id, user_id, tag_name)
+            value (#{id}, #{userId}, #{tagName})
+    </insert>
+    <insert id="saveRelationItemTag">
+        insert into r_goal_item_tag(id, item_id, tag_id)
+            value (#{id}, #{itemId} ,#{tagId})
+    </insert>
+    <select id="queryCategoryIdByUserIdCategoryName" resultType="string">
+        select id
+        from t_goal_category
+        where user_id = #{userId} and category_name =#{categoryName}
+    </select>
+    <select id="queryItemIdByUserIdItemName" resultType="string">
+        select id
+        from t_goal_item
+        where user_id = #{userId} and item_name =#{itemName}
+    </select>
+    <select id="queryTagIdByUserIdTagName" resultType="string">
+        select id
+        from t_goal_tag
+        where user_id = #{userId} and tag_name =#{tagName}
+    </select>
+</mapper>

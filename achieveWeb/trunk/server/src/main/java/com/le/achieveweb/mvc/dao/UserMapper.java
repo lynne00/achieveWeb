@@ -16,6 +16,7 @@ public interface UserMapper {
     User queryByName(String username);
     User queryByNameRole(String username, String role);
     String queryHashPswByName(String username);
+    String queryUserIdByName(String username);
     int updateUserInfo(HashMap<String,Object> map);
     int updateUserPassword(HashMap<String,Object> map);
     void save(User user);

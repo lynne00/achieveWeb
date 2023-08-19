@@ -25,8 +25,8 @@ public class UserService {
     private final UserMapper userMapper;
 
     //    public UserService(UserMapper userMapper) {
-//        this.userMapper = userMapper;
-//    }ss
+    //        this.userMapper = userMapper;
+    //    }ss
     // 登录操作
     public Result login(LoginView user, HttpSession session) {
         String verCode = (String) session.getAttribute(Constants.CAPTCHACODE);
@@ -45,6 +45,7 @@ public class UserService {
             if (isPasswordMatch) {
                 // 登陆成功 设置session 标记登录用户名和登陆状态
                 session.setAttribute(Constants.USERNAME, user.getUsername());
+                session.setAttribute(Constants.USERID,userMapper.queryUserIdByName(user.getUsername()));
                 session.setAttribute(Constants.IS_LOGGED_IN, true);
                 return ResultUtil.success("登录成功");
             } else {

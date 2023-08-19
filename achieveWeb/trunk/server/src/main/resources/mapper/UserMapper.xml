@@ -21,6 +21,11 @@
         from sys_user
         where username = #{username}
     </select>
+    <select id="queryUserIdByName" resultType="string">
+        select id
+        from sys_user
+        where username = #{username}
+    </select>
     <insert id="save">
         insert into sys_user(id, username, hashedPassword, role, created_at, update_at)
         value (#{id}, #{username}, #{password}, '1', #{createdAt}, #{updateAt})
@@ -40,5 +45,4 @@
         from sys_user
         where username = #{username} limit 1
     </delete>
-
 </mapper>
