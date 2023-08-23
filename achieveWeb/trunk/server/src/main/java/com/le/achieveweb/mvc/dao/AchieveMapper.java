@@ -1,6 +1,6 @@
 package com.le.achieveweb.mvc.dao;
 
-import com.le.achieveweb.mvc.model.entity.AchieveItem;
+import com.le.achieveweb.mvc.model.vo.AchieveView;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +18,9 @@ public interface AchieveMapper {
     String queryCategoryIdByUserIdCategoryName(String userId,String categoryName);
     String queryItemIdByUserIdItemName(String userId,String itemName);
     String queryTagIdByUserIdTagName(String userId,String tagName);
+    List<String> queryCategoryByUserId(String userId);
+    List<AchieveView> queryItemRecordByUserId(String userId);
+    List<String>  queryTagByUserId(String userId);
+    List<AchieveView> queryItemRecordByCategoryNameUserId(String categoryName, String userId);
+    List<String> queryTagByItemId(String itemId);
 }

@@ -26,7 +26,7 @@ public class AchieveController {
     public Result newItem(@RequestBody AchieveView achieveView, HttpSession session) {
         return achieveService.createItem(achieveView, session);
     }
-    // 新建项目
+    // 新建项目记录
     @RequestMapping("/newItemRecord")
     @ResponseBody
     public Result newItemRecord(@RequestBody AchieveView achieveView, HttpSession session) {
@@ -38,10 +38,40 @@ public class AchieveController {
     public Result newTag(@RequestBody AchieveView achieveView, HttpSession session) {
         return achieveService.createTag(achieveView, session);
     }
-    // 添加标签
+    // 项目添加标签
     @RequestMapping("/addTag")
     @ResponseBody
     public Result addTag(@RequestBody AchieveView achieveView, HttpSession session) {
         return achieveService.addTag(achieveView, session);
+    }
+    //用户id查询分类
+    @RequestMapping("/getCategory")
+    @ResponseBody
+    public Result getCategory(HttpSession session) {
+        return achieveService.getCategory(session);
+    }
+    //用户id查询项目记录
+    @RequestMapping("/getItemRecord")
+    @ResponseBody
+    public Result getItemRecord(HttpSession session) {
+        return achieveService.getItemRecord(session);
+    }
+    //用户id查询标签
+    @RequestMapping("/getTag")
+    @ResponseBody
+    public Result getTag(HttpSession session) {
+        return achieveService.getTag(session);
+    }
+    //分类查询项目,项目记录
+    @RequestMapping("/getItemRecordByCategory")
+    @ResponseBody
+    public Result getItemRecordByCategory(@RequestBody String categoryName, HttpSession session) {
+        return achieveService.getItemRecordByCategory(categoryName, session);
+    }
+    //项目查询标签
+    @RequestMapping("/getTagByItem")
+    @ResponseBody
+    public Result getTagByItem(@RequestBody String itemName, HttpSession session) {
+        return achieveService.getTagByItem(itemName,session);
     }
 }

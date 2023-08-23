@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,9 @@ public class AchieveService {
     public Result createCategory(AchieveView achieveView, HttpSession session) {
         if (achieveView.getCategoryName() == null || achieveView.getCategoryName().equals("")) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
+        }
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
         }
         HashMap<String, Object> map = new HashMap();
         String categoryId = IdUtil.simpleUUID();
@@ -34,6 +38,9 @@ public class AchieveService {
     public Result createItem(AchieveView achieveView, HttpSession session) {
         if (achieveView.getItemName() == null || achieveView.getItemName().equals("")) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
+        }
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
         }
         HashMap<String, Object> map = new HashMap();
         String itemId = IdUtil.simpleUUID();
@@ -48,6 +55,9 @@ public class AchieveService {
     public Result createItemRecord(AchieveView achieveView, HttpSession session) {
         if (achieveView.getReachDate() == null || achieveView.getReachDate().equals("")) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
+        }
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
         }
         HashMap<String, Object> map = new HashMap();
         String recordItemId = IdUtil.simpleUUID();
@@ -65,6 +75,9 @@ public class AchieveService {
         if (achieveView.getTagName() == null || achieveView.getTagName().equals("")) {
             throw new BusinessException(EmBusinessErr.INPUT_BLANK);
         }
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
         HashMap<String, Object> map = new HashMap();
         String tagId = IdUtil.simpleUUID();
         map.put("id", tagId);
@@ -74,6 +87,12 @@ public class AchieveService {
         return ResultUtil.success("创建分类成功");
     }
     public Result addTag(AchieveView achieveView, HttpSession session) {
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
         String userId = (String) session.getAttribute(Constants.USERID);
         HashMap<String, Object> map = new HashMap();
         String relationItemTagId = IdUtil.simpleUUID();
@@ -82,5 +101,41 @@ public class AchieveService {
         map.put("tagId", achieveMapper.queryTagIdByUserIdTagName(userId, achieveView.getTagName()));
         achieveMapper.saveRelationItemTag(map);
         return ResultUtil.success("添加标签成功");
+    }
+    public Result getCategory(HttpSession session) {
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        List<String> category = achieveMapper.queryCategoryByUserId((String) session.getAttribute(Constants.USERID));
+        return ResultUtil.success(category);
+    }
+    public Result getItemRecord(HttpSession session) {
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        List<AchieveView> itemRecord = achieveMapper.queryItemRecordByUserId((String) session.getAttribute(Constants.USERID));
+        return ResultUtil.success(itemRecord);
+    }
+    public Result getTag(HttpSession session) {
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        List<String> tag = achieveMapper.queryTagByUserId((String) session.getAttribute(Constants.USERID));
+        return ResultUtil.success(tag);
+    }
+    public Result getItemRecordByCategory(String categoryName, HttpSession session) {
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        List<AchieveView> itemRecord = achieveMapper.queryItemRecordByCategoryNameUserId(categoryName, (String) session.getAttribute(Constants.USERID));
+        return ResultUtil.success(itemRecord);
+    }
+    public Result getTagByItem(String itemName, HttpSession session) {
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        String itemId = achieveMapper.queryItemIdByUserIdItemName((String) session.getAttribute(Constants.USERID), itemName);
+        List<String> tag = achieveMapper.queryTagByItemId(itemId);
+        return ResultUtil.success(tag);
     }
 }
