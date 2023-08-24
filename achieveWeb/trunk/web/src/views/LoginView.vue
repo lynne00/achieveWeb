@@ -1,45 +1,57 @@
 <template>
+    <div class="container">
     <div class="login-box">
-        <p>{{ isLogin ? "登录" : "注册" }}</p>
-        <form :model="user">
-            <div class="user-box">
-                <input required="" name="username" type="text" v-model="user.username">
-                <label>请输入用户名</label>
-            </div>
-            <div class="user-box">
-                <input required="" name="" type="password" v-model="user.password">
-                <label>请输入密码</label>
-            </div>
-            <div v-if="!isLogin" class="user-box">
-                <input required="" name="" type="password" v-model="user.passwordAgain">
-                <label>再次输入密码</label>
-            </div>
-            <div v-if="isLogin" class="user-box">
-                <input required="" name="" type="text" v-model="user.captchaCode">
-                <label>请输入验证码 </label>
-                <div class="getCaptcha">
-                    <img :src="codeImg" @click="getimgCaptcha()" title="看不清，点击换一张" loading="lazy" alt="验证码" />
+        <div class="carousel">
+            <!-- 在这里插入轮播图的 HTML 结构 -->
+            <n-carousel autoplay>
+                <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg">
+                <img class="carousel-img" src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg">
+            </n-carousel>
+        </div>
+        <div class="form">
+            <p>{{ isLogin ? "登录" : "注册" }}</p>
+            <form :model="user">
+                <div class="user-box">
+                    <input required="" name="username" type="text" v-model="user.username">
+                    <label>请输入用户名</label>
                 </div>
-            </div>
-            <n-radio-group class="login-radio" v-if="isLogin" v-model:value="roleNum" name="radiogroup">
-                <n-space>
-                    <n-radio style=";" v-for="role in roles" :key="role.value" :value="role.value">
-                        <div style="font-size: 5px;color: #fff;"> {{ role.label }}</div>
-                    </n-radio>
-                </n-space>
-            </n-radio-group>
-            <p v-if="!isLogin">此注册只用于注册用户帐号</p>
-            <a href="#" id="loginButton" @click="handleLogin()">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                提交
-            </a>
-        </form>
-        <p>{{ isLogin ? "没" : "已" }}有账号？点此<a href="#" class="a2" @click="toggleLogin()">{{ isLogin ? "注册！" : "登录！" }}</a>
-        </p>
+                <div class="user-box">
+                    <input required="" name="" type="password" v-model="user.password">
+                    <label>请输入密码</label>
+                </div>
+                <div v-if="!isLogin" class="user-box">
+                    <input required="" name="" type="password" v-model="user.passwordAgain">
+                    <label>再次输入密码</label>
+                </div>
+                <div v-if="isLogin" class="user-box">
+                    <input required="" name="" type="text" v-model="user.captchaCode">
+                    <label>请输入验证码 </label>
+                    <div class="getCaptcha">
+                        <img :src="codeImg" @click="getimgCaptcha()" title="看不清，点击换一张" loading="lazy" alt="验证码" />
+                    </div>
+                </div>
+                <n-radio-group class="login-radio" v-if="isLogin" v-model:value="roleNum" name="radiogroup">
+                    <n-space>
+                        <n-radio style=";" v-for="role in roles" :key="role.value" :value="role.value">
+                            <div style="font-size: 5px;color: #fff;"> {{ role.label }}</div>
+                        </n-radio>
+                    </n-space>
+                </n-radio-group>
+                <p  v-if="!isLogin">此注册只用于注册用户帐号</p>
+                <a href="#" id="loginButton" @click="handleLogin()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    提交
+                </a>
+            </form>
+            <p>{{ isLogin ? "没" : "已" }}有账号？点此<a href="#" class="a2" @click="toggleLogin()">{{ isLogin ? "注册！" : "登录！"
+            }}</a>
+            </p>
+        </div>
     </div>
+</div>
 </template>
 <!-- 组合式 --> 
 <script setup>
@@ -86,7 +98,7 @@ const handleLogin = () => {
             username: user.value.username,
             password: hashedPassword,
             captchaCode: user.value.captchaCode,
-            role:roleNum.value
+            role: roleNum.value
         }).then(result => {
             console.log(result.data)
             if (result.data.msg === 'success') {
@@ -114,6 +126,7 @@ const handleLogin = () => {
                     console.log(222, result.data)
                 }
             });
+            toggleLogin();
         }
     }
 }
@@ -160,17 +173,44 @@ const toggleLogin = () => {
 </script>
   
 <style scoped lang="scss">
+.container{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(106, 75, 75, 0.5);
+}
 .login-box {
+    // 页面居中
     position: absolute;
     top: 46%;
     left: 50%;
-    width: 400px;
-    padding: 40px;
     transform: translate(-50%, -50%);
+    /* 使用 Flexbox 布局 */
+    box-sizing: border-box;   
+    width: 800px;
+    display: flex; 
+    /* 横向分布，左右对齐 */
+    justify-content: space-between; 
+    /* 纵向居中对齐 */
+    align-items: center; 
+    padding: 30px;
     background: rgba(0, 0, 0, 0.9);
     box-sizing: border-box;
-    box-shadow: 35px 35px rgba(0, 0, 0, .6);
-    border-radius: 20px;
+    box-shadow: 50px 50px rgba(0, 0, 0, .6);
+    border-radius: 30px;
+}
+
+.carousel {
+    flex: 1.5; /* 占据剩余空间 */
+}
+.carousel-img {
+  width: 100%;
+  height: 405px;
+  object-fit: cover;
+}
+.form {
+    flex: 1.0; /* 占据剩余空间 */
+    padding: 25px; 
 }
 
 .login-box p:first-child {
@@ -228,8 +268,8 @@ const toggleLogin = () => {
 
 .login-radio {
     position: absolute;
+    margin-left: -100px;
     margin-top: -15px;
-    left: 40px;
     color: #fff;
 }
 
@@ -350,7 +390,6 @@ const toggleLogin = () => {
     color: #aaa;
     font-size: 5px;
     margin-top: -15px;
-    left: 40px;
 }
 
 .login-box p:last-child {
@@ -369,4 +408,5 @@ const toggleLogin = () => {
     color: #aaa;
     border-radius: 5px;
 }
+
 </style>
