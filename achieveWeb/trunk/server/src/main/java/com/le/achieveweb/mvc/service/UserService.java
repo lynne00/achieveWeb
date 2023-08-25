@@ -31,6 +31,9 @@ public class UserService {
     public Result login(LoginView user, HttpSession session) {
         String verCode = (String) session.getAttribute(Constants.CAPTCHACODE);
         User userExistN = userMapper.queryByNameRole(user.getUsername(), user.getRole());
+        if (user.getUsername() == null || user.getUsername().equals("")) {
+            throw new BusinessException(EmBusinessErr.INPUT_BLANK);
+        }
         if (verCode == null) {
             throw new BusinessException(EmBusinessErr.LOGIN_CAPTCHA_TIMEOUT);
         } else if (user.getCaptchaCode() == null) {
