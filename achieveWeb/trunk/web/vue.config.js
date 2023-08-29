@@ -1,6 +1,8 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
+  //关掉eslint
+  lintOnSave: false,
   devServer: {
     port: 9000,
     open: true,

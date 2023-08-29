@@ -60,6 +60,7 @@
 import { ref, onMounted } from 'vue';
 import { hashPassword } from "@/utils/passwordUtil";
 import { useMessage } from 'naive-ui'
+import router from '@/router/index.js'
 import request from "@/utils/request";
 const message = useMessage()
 //切换登录/注册页面
@@ -111,6 +112,7 @@ const handleLogin = () => {
                 console.log(result.data)
                 if (result.data.msg === 'success') {
                     message.success(result.data.data)
+                    router.push('/home')
                 }
                 else {
                     message.error(result.data.msg)
