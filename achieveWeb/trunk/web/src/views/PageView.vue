@@ -20,6 +20,7 @@
 <script setup>
 import Aside from '@/components/Aside.vue'
 import Head from '@/components/Head.vue'
+import Home from '@/modules/Home.vue'
 </script>
   
 <style scoped lang="scss">/* 样式代码 */</style>

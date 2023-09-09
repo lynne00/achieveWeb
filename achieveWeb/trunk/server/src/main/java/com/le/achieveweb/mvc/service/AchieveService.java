@@ -84,7 +84,7 @@ public class AchieveService {
         map.put("userId", session.getAttribute(Constants.USERID));
         map.put("tagName", achieveView.getTagName());
         achieveMapper.saveTag(map);
-        return ResultUtil.success("创建分类成功");
+        return ResultUtil.success("创建标签成功");
     }
     public Result addTag(AchieveView achieveView, HttpSession session) {
         if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
@@ -108,6 +108,13 @@ public class AchieveService {
         }
         List<String> category = achieveMapper.queryCategoryByUserId((String) session.getAttribute(Constants.USERID));
         return ResultUtil.success(category);
+    }
+    public Result getItem(HttpSession session) {
+        if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
+            throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        List<String> item = achieveMapper.queryItemByUserId((String) session.getAttribute(Constants.USERID));
+        return ResultUtil.success(item);
     }
     public Result getItemRecord(HttpSession session) {
         if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){

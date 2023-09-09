@@ -112,7 +112,7 @@ const handleLogin = () => {
                 console.log(result.data)
                 if (result.data.msg === 'success') {
                     message.success(result.data.data)
-                    router.push('/home')
+                    router.push('/home/index')
                 }
                 else {
                     message.error(result.data.msg)
@@ -193,7 +193,7 @@ const toggleLogin = () => {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: rgba(106, 75, 75, 0.5);
+    background: rgba(207, 198, 198, 0.5);
 }
 
 .login-box {

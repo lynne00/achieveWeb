@@ -42,17 +42,22 @@
         from t_goal_category
         where user_id = #{userId}
     </select>
+    <select id="queryItemByUserId" resultType="string">
+        select item_name
+        from t_goal_item
+        where user_id = #{userId}
+    </select>
 <!--    <select id="queryItemRecordByUserId" resultType="com.le.achieveweb.mvc.model.vo.AchieveView">-->
 <!--        select category_name, item_name, reach_quantity, reach_date-->
 <!--        from t_goal_record, t_goal_item, t_goal_category-->
 <!--        where t_goal_record.user_id = #{userId} and t_goal_record.item_id = t_goal_item.id and t_goal_category.id = t_goal_item.goal_category_id-->
 <!--    </select>-->
     <select id="queryItemRecordByUserId" resultType="com.le.achieveweb.mvc.model.vo.AchieveView">
-        select category_name, item_name, reach_quantity, reach_date
-        from t_goal_record r
-                 JOIN t_goal_item i ON item_id = i.id
-                 JOIN t_goal_category c ON i.goal_category_id = c.id
-        where r.user_id = #{userId}
+        select category_name, item_name, reach_quantity, reach_date, create_at
+        from t_goal_item i
+                LEFT JOIN t_goal_category c ON i.goal_category_id = c.id
+                LEFT JOIN t_goal_record r ON item_id = i.id
+        where i.user_id = #{userId}
     </select>
     <select id="queryTagByUserId" resultType="string">
         select tag_name

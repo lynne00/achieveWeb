@@ -50,6 +50,12 @@ public class AchieveController {
     public Result getCategory(HttpSession session) {
         return achieveService.getCategory(session);
     }
+    //用户id查询项目
+    @RequestMapping("/getItem")
+    @ResponseBody
+    public Result getItem(HttpSession session) {
+        return achieveService.getItem(session);
+    }
     //用户id查询项目记录
     @RequestMapping("/getItemRecord")
     @ResponseBody

@@ -1,8 +1,8 @@
 <template>
-    <n-h2 style="margin-top: 20px;--n-margin: 28px 0 10px 0; color:white">Achievement WEB</n-h2>
-    <n-menu
-      style="--n-item-color-active: #636b75;--n-item-color-active-hover: #636b75;--n-item-color-active-collapsed: #636b75;"
-      :inverted="true" :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" />
+  <n-h2 style="margin-top: 20px;--n-margin: 28px 0 10px 0; color:white">Achievement WEB</n-h2>
+  <n-menu
+    style="--n-item-color-active: #636b75;--n-item-color-active-hover: #636b75;--n-item-color-active-collapsed: #636b75;"
+    :inverted="true" :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" />
 </template>
  
 <script setup>
@@ -38,7 +38,6 @@ const menuOptions = [
     icon: renderIcon(HomeOutline)
   },
   {
-    
     label: () =>
       h(
         RouterLink,
@@ -58,37 +57,55 @@ const menuOptions = [
     icon: renderIcon(BookmarksOutline),
     children: [
       {
-        label: "添加项目",
-        key: "createProject",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: 'category',
+              }
+            },
+            '分类管理'
+          ),
         icon: renderIcon(BookmarkOutline),
-        children: [
-          {
-            label: "创建分类",
-            key: "category"
-          },
-          {
-            label: "创建标签",
-            key: "tag"
-          },
-          {
-            label: "创建项目",
-            key: "item"
-          },
-          {
-            label: "创建项目记录",
-            key: "itemRecord"
-          },
-          {
-            label: "添加标签",
-            key: "addTag"
-          }
-        ]
+        key: "category"
       },
       {
-        label: "删除项目",
-        key: "deleteProject",
-        icon: renderIcon(TrashBinOutline)
-      }
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: 'tag',
+              }
+            },
+            '标签管理'
+          ),
+        icon: renderIcon(BookmarkOutline),
+        key: "tag"
+      },
+      {
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: 'itemRecord',
+              }
+            },
+            '记录管理'
+          ),
+        icon: renderIcon(BookmarkOutline),
+        key: "itemRecord"
+      },
+      // {
+      //   label: "创建项目记录",
+      //   key: "itemRecord"
+      // },
+      // {
+      //   label: "添加标签",
+      //   key: "addTag"
+      // }
     ]
   },
   {

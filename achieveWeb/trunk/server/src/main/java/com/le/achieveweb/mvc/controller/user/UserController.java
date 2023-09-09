@@ -54,7 +54,7 @@ public class UserController {
     //修改用户密码
     @RequestMapping("/updatePassword")
     @ResponseBody
-    public Result updateInfo(@RequestBody String password,HttpSession session) {
+    public Result updatePassword(@RequestBody String password,HttpSession session) {
         return userService.updatePassword(password,session);
     }
 }

@@ -102,8 +102,7 @@ public class UserService {
         map.put("email", user.getEmail());
         map.put("updateAt", LocalDateTime.now());
         userMapper.updateUserInfo(map);
-        userInfo = userMapper.queryByName((String) session.getAttribute(Constants.USERNAME));
-        return ResultUtil.success(userInfo);
+        return ResultUtil.success("修改资料成功");
     }
 
     // 用户修改密码

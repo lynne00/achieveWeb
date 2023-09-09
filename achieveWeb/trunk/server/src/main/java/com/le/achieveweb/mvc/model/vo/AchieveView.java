@@ -10,4 +10,5 @@ public class AchieveView {
     private String tagName;
     private int reachQuantity;
     private LocalDateTime reachDate;
+    private LocalDateTime createAt;
 }
