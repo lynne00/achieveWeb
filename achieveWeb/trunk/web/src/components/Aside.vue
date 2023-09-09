@@ -13,9 +13,10 @@ import {
   BookOutline as BookIcon,
   PersonOutline as PersonIcon,
   HomeOutline as HomeOutline,
-  BookmarksOutline as BookmarksOutline,
+  BookmarksOutline as BookmarksOutline, 
   BookmarkOutline as BookmarkOutline,
-  TrashBinOutline as TrashBinOutline
+  TrashBinOutline as TrashBinOutline,
+  CheckboxOutline as CheckboxOutline
 } from "@vicons/ionicons5";
 
 function renderIcon(icon) {
@@ -115,10 +116,21 @@ const menuOptions = [
     children: [
       {
         label: "项目菜单",
-        key: "itemMenu"
+        key: "itemMenu",
+        icon: renderIcon(CheckboxOutline),
       },
       {
-        label: "项目总览",
+        label: () =>
+          h(
+            RouterLink,
+            {
+              to: {
+                name: 'itemOverview',
+              }
+            },
+            '项目总览'
+          ),
+        icon: renderIcon(CheckboxOutline),
         key: "itemOverview"
       },
     ]

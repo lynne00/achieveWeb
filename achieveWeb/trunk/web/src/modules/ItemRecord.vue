@@ -101,22 +101,30 @@ const columns = ref([
     },
     {
         title: "标签",
-        key: "tag",
+        key: "tags",
         render(row) {
-            console.log(123123, row.itemName)
-            request.post('/achieve/getTagByItem', row.itemName).then(result => {
-                console.log(123333, result)
+            request.post('/achieve/getTagByItem', row.itemName, 
+            /*前端发送axios请求时，默认的请求头headers内部的Content-Type
+            是application/x-www-form-urlencoded;charset=UTF-8，
+            这是一种键值对的数据结构，前端传过来的内容是放在k中，v为空，这时候取值时，
+            内容就变成了k=,也就是为什么后端接收的数据，末尾多了一个＝*/
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(result => {
+                // console.log(result)
                 if (result.data.data.length != 0) {
                     row.tags = result.data.data
                 }
             })
-            if (row.tagName != null) {
+            if (row.tags != null) {
                 const tags = row.tags.map((tagKey) => {
                     return h(
                         NTag,
                         {
                             style: {
-                                marginRight: "6px"
+                                margin: "6px"
                             },
                             type: "info",
                             bordered: false
@@ -156,7 +164,7 @@ const columns = ref([
             ]);
         },
     }])
-//项目信息
+//项目记录信息
 let data = ref([])
 //分类信息
 let categrayOptions = ref([])

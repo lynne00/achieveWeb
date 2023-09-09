@@ -10,23 +10,25 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () => import('../views/PageView.vue'),
-    redirect:"/index",
+    redirect: "/index",
     children: [
-      { path: 'index', name: 'index', component: () => import('../modules/Home.vue'), meta: { name: "首页" }},
-      { path: 'userInfo', name: 'userInfo', component: () => import('../modules/UserInfo.vue'), meta: { name: "个人资料" }},
+      { path: 'index', name: 'index', component: () => import('../modules/Home.vue'), meta: { name: "首页" } },
+      { path: 'userInfo', name: 'userInfo', component: () => import('../modules/UserInfo.vue'), meta: { name: "个人资料" } },
       {
         path: 'manageItem', name: 'manageItem',
         children: [
-          {
-            path: 'createProject', name: 'createProject', 
-            children: [
-              { path: 'category', name: 'category', component: () => import('../modules/Category.vue'), meta: { name: "分类管理" } },
-              { path: 'tag', name: 'tag', component: () => import('../modules/Tag.vue') , meta: { name: "标签管理" }},
-              // { path: 'item', name: 'item', component: () => import('../modules/Item.vue'), meta: { name: "项目管理" } },
-              { path: 'itemRecord', name: 'itemRecord', component: () => import('../modules/ItemRecord.vue'), meta: { name: "项目管理" } },
-              // { path: 'addTag', name: 'addTag', component: () => import('../modules/AddTag.vue') },
-            ]
-          },
+          { path: 'category', name: 'category', component: () => import('../modules/Category.vue'), meta: { name: "分类管理" } },
+          { path: 'tag', name: 'tag', component: () => import('../modules/Tag.vue'), meta: { name: "标签管理" } },
+          // { path: 'item', name: 'item', component: () => import('../modules/Item.vue'), meta: { name: "项目管理" } },
+          { path: 'itemRecord', name: 'itemRecord', component: () => import('../modules/ItemRecord.vue'), meta: { name: "项目管理" } },
+          // { path: 'addTag', name: 'addTag', component: () => import('../modules/AddTag.vue') },
+        ]
+      },
+      {
+        path: 'itemList', name: 'itemList',
+        children: [
+          { path: 'itemOverview', name: 'itemOverview', component: () => import('../modules/ItemOverView.vue'), meta: { name: "项目总览" } },
+          // { path: 'tag', name: 'tag', component: () => import('../modules/Tag.vue'), meta: { name: "标签管理" } },
         ]
       },
     ]
