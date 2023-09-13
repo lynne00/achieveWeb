@@ -64,8 +64,13 @@ const submit = () => {
             {
                 tagName: newTag.value
             }).then(result => {
+                if (result.data.msg === 'success') {
                 message.success(result.data.data)
                 location.reload()
+                }
+                else{
+                    message.error(result.data.msg)
+                }
             })
     }
 }

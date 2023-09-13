@@ -109,8 +109,13 @@ public class AchieveService {
         HashMap<String, Object> map = new HashMap();
         String relationItemTagId = IdUtil.simpleUUID();
         map.put("id", relationItemTagId);
+        map.put("userId",userId);
         map.put("itemId", achieveMapper.queryItemIdByUserIdItemName(userId, achieveView.getItemName()));
         map.put("tagId", achieveMapper.queryTagIdByUserIdTagName(userId, achieveView.getTagName()));
+        String tagExist = achieveMapper.queryReItemTagIdByUserIdTagItem(map);
+        if(tagExist!=null){
+            throw new BusinessException(EmBusinessErr.DATA_EXISTED);
+        }
         achieveMapper.saveRelationItemTag(map);
         return ResultUtil.success("添加标签成功");
     }

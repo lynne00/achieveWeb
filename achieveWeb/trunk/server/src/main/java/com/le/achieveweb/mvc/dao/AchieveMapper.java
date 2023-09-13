@@ -18,6 +18,7 @@ public interface AchieveMapper {
     String queryCategoryIdByUserIdCategoryName(String userId,String categoryName);
     String queryItemIdByUserIdItemName(String userId,String itemName);
     String queryTagIdByUserIdTagName(String userId,String tagName);
+    String queryReItemTagIdByUserIdTagItem(HashMap<String,Object> map);
     List<String> queryCategoryByUserId(String userId);
     List<AchieveView> queryItemRecordByUserId(String userId);
     List<String>  queryTagByUserId(String userId);

@@ -47,6 +47,11 @@
         from t_goal_item
         where user_id = #{userId}
     </select>
+    <select id="queryReItemTagIdByUserIdTagItem" resultType="string">
+        select id
+        from r_goal_item_tag
+        where tag_id=#{tagId} and item_id = #{itemId}
+    </select>
 <!--    <select id="queryItemRecordByUserId" resultType="com.le.achieveweb.mvc.model.vo.AchieveView">-->
 <!--        select category_name, item_name, reach_quantity, reach_date-->
 <!--        from t_goal_record, t_goal_item, t_goal_category-->
