@@ -27,6 +27,10 @@ public class AchieveService {
         if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
             throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
         }
+        String categoryExist = achieveMapper.queryCategoryIdByUserIdCategoryName(String.valueOf(session.getAttribute(Constants.USERID)),achieveView.getCategoryName());
+        if(categoryExist!=null){
+            throw new BusinessException(EmBusinessErr.DATA_EXISTED);
+        }
         HashMap<String, Object> map = new HashMap();
         String categoryId = IdUtil.simpleUUID();
         map.put("id", categoryId);
@@ -41,6 +45,10 @@ public class AchieveService {
         }
         if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
             throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        String itemExist = achieveMapper.queryItemIdByUserIdItemName(String.valueOf(session.getAttribute(Constants.USERID)),achieveView.getItemName());
+        if(itemExist!=null){
+            throw new BusinessException(EmBusinessErr.DATA_EXISTED);
         }
         HashMap<String, Object> map = new HashMap();
         String itemId = IdUtil.simpleUUID();
@@ -77,6 +85,10 @@ public class AchieveService {
         }
         if(session.getAttribute(Constants.USERID) == null || session.getAttribute(Constants.USERID).equals("")){
             throw new BusinessException(EmBusinessErr.LOGIN_NOT_EXISTED);
+        }
+        String tagExist = achieveMapper.queryTagIdByUserIdTagName(String.valueOf(session.getAttribute(Constants.USERID)),achieveView.getTagName());
+        if(tagExist!=null){
+            throw new BusinessException(EmBusinessErr.DATA_EXISTED);
         }
         HashMap<String, Object> map = new HashMap();
         String tagId = IdUtil.simpleUUID();

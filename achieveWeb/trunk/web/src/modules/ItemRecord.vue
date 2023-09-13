@@ -103,21 +103,6 @@ const columns = ref([
         title: "标签",
         key: "tags",
         render(row) {
-            request.post('/achieve/getTagByItem', row.itemName, 
-            /*前端发送axios请求时，默认的请求头headers内部的Content-Type
-            是application/x-www-form-urlencoded;charset=UTF-8，
-            这是一种键值对的数据结构，前端传过来的内容是放在k中，v为空，这时候取值时，
-            内容就变成了k=,也就是为什么后端接收的数据，末尾多了一个＝*/
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(result => {
-                // console.log(result)
-                if (result.data.data.length != 0) {
-                    row.tags = result.data.data
-                }
-            })
             if (row.tags != null) {
                 const tags = row.tags.map((tagKey) => {
                     return h(
@@ -193,8 +178,28 @@ onMounted(() => {
     })
     //获取项目记录
     request.post('/achieve/getItemRecord').then(result => {
+        console.log("getItemRecord", result.data.data)
         if (result.data.data.length != 0) {
             data.value = result.data.data
+            console.log("data", result.data.data)
+            data.value.map(item => (
+                request.post('/achieve/getTagByItem', item.itemName,
+                    /*前端发送axios请求时，默认的请求头headers内部的Content-Type
+                    是application/x-www-form-urlencoded;charset=UTF-8，
+                    这是一种键值对的数据结构，前端传过来的内容是放在k中，v为空，这时候取值时，
+                    内容就变成了k=,也就是为什么后端接收的数据，末尾多了一个＝*/
+                    {
+                        headers: {
+                            'Content-Type': 'text/plain'
+                        },
+                    }).then(result => {
+            
+                        if (result.data.data.length != 0) {
+                            item.tags = result.data.data
+                            console.log('tags', item.tags)
+                        }
+                    })
+            ))
         }
     })
     //获取标签信息
@@ -229,9 +234,14 @@ const submit = () => {
                 categoryName: newItem.value.categoryName,
                 itemName: newItem.value.itemName
             }).then(result => {
-                message.success(result.data.data)
+                if (result.data.msg === 'success') {
+                    message.success(result.data.data)
+                    location.reload()
+                }
+                else {
+                    message.error(result.data.msg)
+                }
             })
-        location.reload()
     }
 }
 //填写记录

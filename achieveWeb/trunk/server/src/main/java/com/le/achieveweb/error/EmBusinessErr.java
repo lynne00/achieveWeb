@@ -9,6 +9,7 @@ public enum EmBusinessErr implements CommonError {
     LOGIN_CAPTCHA_TIMEOUT(2005, "验证码超时"),
     PARAMETER_INVALIDATION(1000, "参数不合法"),
     LOGIN_NOT_EXISTED(2006, "未登录"),
+    DATA_EXISTED(2006, "数据已存在"),
     UNKNOWN_ERROR(000, "未知错误");
     private final Integer errCode;
     private String msg;
