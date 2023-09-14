@@ -25,4 +25,9 @@ public interface AchieveMapper {
     List<String>  queryItemByUserId(String userId);
     List<AchieveView> queryItemRecordByCategoryNameUserId(String categoryName, String userId);
     List<String> queryTagByItemId(String itemId);
+    void deleteCategory(HashMap<String,Object> map);
+    void deleteItem(HashMap<String,Object> map);
+    void deleteItemRecord(HashMap<String,Object> map);
+    void deleteTag(HashMap<String,Object> map);
+    void deleteRelationItemTag(HashMap<String,Object> map);
 }

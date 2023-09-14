@@ -1,9 +1,9 @@
 <template>
     <n-space style="margin-bottom: 25px;">
-        <div class="modules-title">项目管理</div>
+        <div class="modules-title">项目详细</div>
         <div>
             <n-button style="margin-left: 5px; margin-right: 10px;" @click="addItem">新建项目</n-button>
-            <n-button @click="addRecord">填写记录</n-button>
+            <n-button @click="delItem">删除项目</n-button>
         </div>
     </n-space>
     <n-space vertical style="margin-top: 25px;">
@@ -31,8 +31,7 @@
     <n-modal v-model:show="isRecVisible" :trap-focus="false">
         <n-form :model="newItemRecord" :size="big" class="form" :rules="rules">
             <n-form-item label="项目名">
-                <n-select :allow-input="reg" v-model:value="newItemRecord.itemName" placeholder="选择项目"
-                    :options="itemOptions" />
+                <n-input :value="newItemRecord.itemName" />
             </n-form-item>
             <n-form-item label="达成数量">
                 <n-input-number style="width: 100%;" :min="0" :allow-input="reg" v-model:value="newItemRecord.reachQuantity"
@@ -70,6 +69,8 @@
             </n-form-item>
         </n-form>
     </n-modal>
+    <!-- <n-select :allow-input="reg" v-model:value="newItemRecord.itemName" placeholder="选择项目"
+                    :options="itemOptions" /> -->
 </template>
 
 <script setup>
@@ -129,12 +130,12 @@ const columns = ref([
         key: "actions",
         render(row) {
             return h("div", [
-                h(
+                h('div', [h(
                     NButton,
                     {
                         size: "small",
                         onClick: () => addTag(row),
-                        style: { marginRight: "20px" }
+                        style: { marginRight: "10px" }
                     },
                     "添加标签"
                 ),
@@ -142,10 +143,30 @@ const columns = ref([
                     NButton,
                     {
                         size: "small",
-                        onClick: () => delItem(row)
+                        onClick: () => delTag(row),
+                        style: { marginRight: "10px", marginTop: "10px" }
                     },
-                    "删除项目"
-                )
+                    "移除标签"
+                ),]),
+                h('div', [h(
+                    NButton,
+                    {
+                        size: "small",
+                        onClick: () => addRecord(row),
+                        style: { marginRight: "10px", marginTop: "10px" }
+                    },
+                    "填写记录"
+                ),
+                h(
+                    NButton,
+                    {
+                        size: "small",
+                        onClick: () => delItem(row),
+                        style: { marginTop: "10px" }
+                    },
+                    "删除记录"
+                )])
+
             ]);
         },
     }])
@@ -193,7 +214,6 @@ onMounted(() => {
                             'Content-Type': 'text/plain'
                         },
                     }).then(result => {
-            
                         if (result.data.data.length != 0) {
                             item.tags = result.data.data
                             console.log('tags', item.tags)
@@ -246,7 +266,8 @@ const submit = () => {
 }
 //填写记录
 let isRecVisible = ref(false)
-const addRecord = () => {
+const addRecord = (row) => {
+    newItemRecord.value.itemName=row.itemName
     isRecVisible.value = true
 }
 const closeRec = () => {
@@ -296,9 +317,14 @@ const submitTag = () => {
                 tagName: newAddTag.value.tagName,
                 itemName: newAddTag.value.itemName
             }).then(result => {
-                message.success(result.data.data)
+                if (result.data.msg === 'success') {
+                    message.success(result.data.data)
+                    location.reload()
+                }
+                else {
+                    message.error(result.data.msg)
+                }
             })
-        location.reload()
     }
 }
 //非空正则
